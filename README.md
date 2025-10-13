@@ -5,7 +5,7 @@ If you have any questions, feel free to contact Wenjing Yan (yanwl2119@seu.edu.c
 
 ##  Get You Ready
 
-<details>
+
   
 ### 1. Conda Environment
 ```
@@ -16,7 +16,7 @@ pip install git+https://github.com/openai/CLIP.git
 We test our code on Python 3.7.13 and PyTorch 1.7.1
 
 #### Alternative: Pip Installation
-<details>
+
 We provide an alternative pip installation in case you encounter difficulties setting up the conda environment.
 
 ```
@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 We test this installation on Python 3.10
 
-</details>
+
 
 ### 2. Models and Dependencies
 
@@ -62,4 +62,4 @@ cp -r ../HumanML3D/HumanML3D ./dataset/HumanML3D
 
 #### 
 
-</details>
+
