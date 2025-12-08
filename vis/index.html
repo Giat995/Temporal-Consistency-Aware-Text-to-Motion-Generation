@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频文件库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .video-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: #000;
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-info {
+            padding: 20px;
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .video-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.85rem;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background: white;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 16px;
+            border-color: transparent transparent transparent #667eea;
+            margin-left: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 视频资源库</h1>
+            <p>点击视频卡片查看详细信息</p>
+        </header>
+        
+        <div class="video-grid" id="videoGrid">
+            <!-- 视频卡片会通过JavaScript动态生成 -->
+        </div>
+    </div>
+
+    <script>
+        // 视频数据数组
+        const videos = [
+            {
+                id: 1,
+                title: "美丽的日落",
+                description: "这是一段关于海边日落的美丽视频，展现了自然的壮丽景色。",
+                videoUrl: "videos/sunset.mp4",
+                thumbnail: "thumbnails/sunset.jpg",
+                duration: "2:30",
+                uploadDate: "2024-01-15"
+            },
+            {
+                id: 2,
+                title: "城市夜景",
+                description: "繁华都市的夜景，灯火辉煌，展现了现代都市的魅力。",
+                videoUrl: "videos/city-night.mp4",
+                thumbnail: "thumbnails/city-night.jpg",
+                duration: "1:45",
+                uploadDate: "2024-01-10"
+            },
+            {
+                id: 3,
+                title: "自然风光",
+                description: "壮丽的山脉和森林，大自然的鬼斧神工。",
+                videoUrl: "videos/nature.mp4",
+                thumbnail: "thumbnails/nature.jpg",
+                duration: "3:20",
+                uploadDate: "2024-01-05"
+            },
+            {
+                id: 4,
+                title: "技术教程",
+                description: "关于现代Web开发的技术教程视频，包含实用的技巧和建议。",
+                videoUrl: "videos/tutorial.mp4",
+                thumbnail: "thumbnails/tutorial.jpg",
+                duration: "5:10",
+                uploadDate: "2024-01-01"
+            }
+        ];
+      
+        // 从JSON文件加载视频数据
+        async function loadVideos() {
+            try {
+                const response = await fetch('videos.json');
+                const data = await response.json();
+                return data.videos;
+            } catch (error) {
+                console.error('加载视频数据失败:', error);
+                return [];
+            }
+        }
+      
+        // 渲染视频卡片
+        async function renderVideos() {
+            const videoGrid = document.getElementById('videoGrid');
+            const videos = await loadVideos();
+            
+            videos.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                
+                videoCard.innerHTML = `
+                    <div class="video-container">
+                        <video poster="${video.thumbnail}">
+                            <source src="${video.videoUrl}" type="video/mp4">
+                            您的浏览器不支持视频标签。
+                        </video>
+                        <button class="play-button" onclick="togglePlay(this)"></button>
+                    </div>
+                    <div class="video-info">
+                        <h3>${video.title}</h3>
+                        <p class="video-description">${video.description}</p>
+                        <div class="video-meta">
+                            <span>时长: ${video.duration}</span>
+                            <span>${video.uploadDate}</span>
+                        </div>
+                    </div>
+                `;
+                
+                videoGrid.appendChild(videoCard);
+            });
+        }
+
+        // 播放/暂停视频
+        function togglePlay(button) {
+            const videoContainer = button.parentElement;
+            const video = videoContainer.querySelector('video');
+            
+            if (video.paused) {
+                video.play();
+                button.style.opacity = '0';
+            } else {
+                video.pause();
+                button.style.opacity = '1';
+            }
+        }
+
+        // 页面加载完成后渲染视频
+        document.addEventListener('DOMContentLoaded', renderVideos);
+    </script>
+</body>
+</html>
