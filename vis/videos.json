@@ -1,0 +1,21 @@
+{
+  "videos": [
+    {
+      "id": 1,
+      "title": "美丽的日落",
+      "description": "这是一段关于海边日落的美丽视频，展现了自然的壮丽景色。",
+      "videoUrl": "videos/t2m/mp4/good/G5341_R2_C2_mesh",
+      "duration": "2:30",
+      "uploadDate": "2024-01-15"
+    },
+    {
+      "id": 2,
+      "title": "城市夜景",
+      "description": "繁华都市的夜景，灯火辉煌，展现了现代都市的魅力。",
+      "videoUrl": "videos/city-night.mp4",
+      "thumbnail": "thumbnails/city-night.jpg",
+      "duration": "1:45",
+      "uploadDate": "2024-01-10"
+    }
+  ]
+}
