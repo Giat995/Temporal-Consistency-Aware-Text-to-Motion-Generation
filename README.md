@@ -3,6 +3,8 @@
 This repository offers the official Pytorch code for this paper.
 If you have any questions, feel free to contact Hongsong Wang (hongsongwang@seu.edu.cn).
 
+The project with motion generation visualizations are [https://giat995.github.io/video_vis/](https://giat995.github.io/video_vis/)
+
 ##  Get You Ready
   
 ### 1. Conda Environment
